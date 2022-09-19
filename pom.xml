@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<groupId>lelouet.tests.liquibase</groupId>
+	<artifactId>LiquibaseOracle</artifactId>
+	<name>Liquibase-oracle</name>
+	<version>1.0.0</version>
+
+	<properties>
+		<db.driver>oracle.jdbc.OracleDriver</db.driver>
+		<db.schema>tester</db.schema>
+		<db.url>offline:oracle</db.url>
+<!--		<db.url>jdbc:oracle:thin:@//oracle_host:1521/XE</db.url>-->
+		<db.username>tester</db.username>
+		<db.password>tester</db.password>
+		<liquibase.changeLogFile>data.xml</liquibase.changeLogFile>
+		<liquibase.version>4.15.0</liquibase.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc10</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase.ext</groupId>
+			<artifactId>liquibase-oracle</artifactId>
+			<version>${liquibase.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<changeLogFile>${liquibase.changeLogFile}</changeLogFile>
+					<defaultSchemaName>${db.schema}</defaultSchemaName>
+					<driver>${db.driver}</driver>
+					<expressionVariables>
+						<db.schema>${db.schema}</db.schema>
+					</expressionVariables>
+					<migrationSqlOutputFile>docker/sql/export.sql</migrationSqlOutputFile>
+					<outputFileEncoding>UTF-8</outputFileEncoding>
+					<password>${db.password}</password>
+					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+					<url>${db.url}</url>
+					<username>${db.username}</username>
+					<!-- <referenceUrl>hibernate:ejb3:MeveoAdmin</referenceUrl> -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
